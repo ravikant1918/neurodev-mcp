@@ -129,7 +129,7 @@ neurodev-mcp/
 ├─ test_installation.py       # Installation validator
 ├─ examples.py                # Usage examples
 └─ requirements.txt           # Dependencies
-\`\`\`
+```
 
 </details>
 
@@ -142,9 +142,9 @@ neurodev-mcp/
 <details open>
 <summary><b>🖥️ Claude Desktop</b></summary>
 
-Edit \`~/Library/Application Support/Claude/claude_desktop_config.json\`:
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
-\`\`\`json
+```json
 {
   "mcpServers": {
     "neurodev-mcp": {
@@ -153,9 +153,9 @@ Edit \`~/Library/Application Support/Claude/claude_desktop_config.json\`:
     }
   }
 }
-\`\`\`
+```
 
-> 💡 **Tip:** Replace \`/absolute/path/to/neurodev-mcp\` with your actual path
+> 💡 **Tip:** Replace `/absolute/path/to/neurodev-mcp` with your actual path
 
 </details>
 
@@ -164,14 +164,14 @@ Edit \`~/Library/Application Support/Claude/claude_desktop_config.json\`:
 
 Add to your MCP settings:
 
-\`\`\`json
+```json
 {
   "neurodev-mcp": {
     "command": "python",
     "args": ["-m", "neurodev_mcp.server"]
   }
 }
-\`\`\`
+```
 
 </details>
 
@@ -180,13 +180,13 @@ Add to your MCP settings:
 
 Run the server directly:
 
-\`\`\`bash
+```bash
 # Using the module
 python -m neurodev_mcp.server
 
 # Or as a command (if installed)
 neurodev-mcp
-\`\`\`
+```
 
 </details>
 
@@ -206,16 +206,16 @@ Try these commands with your AI assistant:
 
 ## 🛠️ Available Tools
 
-### **1. \`code_review\`**
+### **1. `code_review`**
 🔍 Comprehensive code analysis with multiple static analysis tools
 
 **Input:**
-\`\`\`json
+```json
 {
-  "code": "def calculate(x):\\n    return x * 2",
+  "code": "def calculate(x):\n    return x * 2",
   "analyzers": ["pylint", "flake8", "mypy", "bandit", "radon", "ast"]
 }
-\`\`\`
+```
 
 **Output:**
 - Detailed issue reports from each analyzer
@@ -226,17 +226,17 @@ Try these commands with your AI assistant:
 
 ---
 
-### **2. \`generate_tests\`**
+### **2. `generate_tests`**
 🧪 Intelligent pytest test generation using AST analysis
 
 **Input:**
-\`\`\`json
+```json
 {
-  "code": "def add(a: int, b: int) -> int:\\n    return a + b",
+  "code": "def add(a: int, b: int) -> int:\n    return a + b",
   "module_name": "calculator",
   "save": false
 }
-\`\`\`
+```
 
 **Output:**
 - Complete pytest test suite
@@ -246,17 +246,17 @@ Try these commands with your AI assistant:
 
 ---
 
-### **3. \`run_tests\`**
+### **3. `run_tests`**
 ▶️ Execute pytest tests with coverage reporting
 
 **Input:**
-\`\`\`json
+```json
 {
-  "test_code": "def test_add():\\n    assert add(1, 2) == 3",
-  "source_code": "def add(a, b):\\n    return a + b",
+  "test_code": "def test_add():\n    assert add(1, 2) == 3",
+  "source_code": "def add(a, b):\n    return a + b",
   "timeout": 30
 }
-\`\`\`
+```
 
 **Output:**
 - Pass/fail status
@@ -267,16 +267,16 @@ Try these commands with your AI assistant:
 
 ---
 
-### **4. \`format_code\`**
+### **4. `format_code`**
 🎨 Auto-format Python code to PEP8 standards
 
 **Input:**
-\`\`\`json
+```json
 {
-  "code": "def   messy(  x,y  ):\\n        return x+y",
+  "code": "def   messy(  x,y  ):\n        return x+y",
   "line_length": 88
 }
-\`\`\`
+```
 
 **Output:**
 - Beautifully formatted code
@@ -290,7 +290,7 @@ Try these commands with your AI assistant:
 
 ### **Example 1: Complete Code Review Workflow**
 
-\`\`\`
+```
 You: "Review this code for issues and security problems"
 
 [paste code]
@@ -303,11 +303,11 @@ AI: [Uses code_review tool]
 You: "Fix those issues and show me the updated code"
 
 AI: [Provides fixed code with explanations]
-\`\`\`
+```
 
 ### **Example 2: Test Generation & Execution**
 
-\`\`\`
+```
 You: "Generate tests for this function and run them"
 
 def divide(a: float, b: float) -> float:
@@ -324,11 +324,11 @@ AI: [Uses generate_tests tool]
     → 5/5 tests passing ✓
     → 100% code coverage
     → All edge cases handled
-\`\`\`
+```
 
 ### **Example 3: Code Formatting**
 
-\`\`\`
+```
 You: "Format this messy code"
 
 def   calculate(  x,y,z  ):
@@ -346,7 +346,7 @@ def calculate(x, y, z):
     if result > 10:
         return True
     return False
-\`\`\`
+```
 
 ---
 
@@ -354,17 +354,17 @@ def calculate(x, y, z):
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| \`mcp\` | ≥0.9.0 | Model Context Protocol SDK |
-| \`pylint\` | ≥3.0.0 | Code quality analysis |
-| \`flake8\` | ≥7.0.0 | Style checking |
-| \`mypy\` | ≥1.7.0 | Static type checking |
-| \`bandit\` | ≥1.7.5 | Security scanning |
-| \`radon\` | ≥6.0.1 | Complexity metrics |
-| \`black\` | ≥23.12.0 | Code formatting |
-| \`autopep8\` | ≥2.0.4 | PEP8 formatting |
-| \`pytest\` | ≥7.4.3 | Testing framework |
-| \`pytest-cov\` | ≥4.1.0 | Coverage reporting |
-| \`pytest-timeout\` | ≥2.2.0 | Test timeouts |
+| `mcp` | ≥0.9.0 | Model Context Protocol SDK |
+| `pylint` | ≥3.0.0 | Code quality analysis |
+| `flake8` | ≥7.0.0 | Style checking |
+| `mypy` | ≥1.7.0 | Static type checking |
+| `bandit` | ≥1.7.5 | Security scanning |
+| `radon` | ≥6.0.1 | Complexity metrics |
+| `black` | ≥23.12.0 | Code formatting |
+| `autopep8` | ≥2.0.4 | PEP8 formatting |
+| `pytest` | ≥7.4.3 | Testing framework |
+| `pytest-cov` | ≥4.1.0 | Coverage reporting |
+| `pytest-timeout` | ≥2.2.0 | Test timeouts |
 
 **Python:** 3.8 or higher
 
@@ -374,7 +374,7 @@ def calculate(x, y, z):
 
 ### **Running Tests**
 
-\`\`\`bash
+```bash
 # Run installation tests
 python test_installation.py
 
@@ -383,11 +383,11 @@ python examples.py
 
 # Run pytest (if you add tests)
 pytest
-\`\`\`
+```
 
 ### **Using as a Library**
 
-\`\`\`python
+```python
 from neurodev_mcp import CodeAnalyzer, TestGenerator, TestExecutor
 import asyncio
 
@@ -400,7 +400,7 @@ tests = TestGenerator.generate_tests(code, "mymodule")
 
 # Run tests
 output = TestExecutor.run_tests(test_code, source_code)
-\`\`\`
+```
 
 ---
 
@@ -419,7 +419,7 @@ output = TestExecutor.run_tests(test_code, source_code)
 <details>
 <summary><b>Import or module errors?</b></summary>
 
-\`\`\`bash
+```bash
 # Reinstall the package
 pip install -e .
 
@@ -428,7 +428,7 @@ python -c "from neurodev_mcp import CodeAnalyzer; print('✓ OK')"
 
 # Run installation tests
 python test_installation.py
-\`\`\`
+```
 
 </details>
 
@@ -436,9 +436,9 @@ python test_installation.py
 <summary><b>Tests failing?</b></summary>
 
 - ✅ Ensure Python 3.8+ is installed
-- ✅ Activate virtual environment: \`source .venv/bin/activate\`
-- ✅ Reinstall dependencies: \`pip install -e .\`
-- ✅ Run: \`python test_installation.py\` to diagnose
+- ✅ Activate virtual environment: `source .venv/bin/activate`
+- ✅ Reinstall dependencies: `pip install -e .`
+- ✅ Run: `python test_installation.py` to diagnose
 
 </details>
 
@@ -446,7 +446,7 @@ python test_installation.py
 <summary><b>Performance issues?</b></summary>
 
 - Some analyzers (pylint, mypy) can be slow on large files
-- Use specific analyzers: \`"analyzers": ["flake8", "ast"]\`
+- Use specific analyzers: `"analyzers": ["flake8", "ast"]`
 - Increase timeout for large test suites
 - Consider caching results (future feature)
 
@@ -459,11 +459,11 @@ python test_installation.py
 Contributions are welcome! Here's how:
 
 1. Fork the repository
-2. Create a feature branch: \`git checkout -b feature/amazing-feature\`
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Make your changes
-4. Run tests: \`python test_installation.py\`
-5. Commit: \`git commit -m 'Add amazing feature'\`
-6. Push: \`git push origin feature/amazing-feature\`
+4. Run tests: `python test_installation.py`
+5. Commit: `git commit -m 'Add amazing feature'`
+6. Push: `git push origin feature/amazing-feature`
 7. Open a Pull Request
 
 ### **Future Enhancements**
