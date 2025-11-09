@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "neurodev-mcp": {
+      "command": "python",
+      "args": ["-m", "neurodev_mcp.server"]
+    }
+  }
+}

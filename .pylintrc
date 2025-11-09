@@ -1,0 +1,32 @@
+[pylint]
+max-line-length = 100
+disable = C0111,  # missing-docstring
+          R0903,  # too-few-public-methods
+          R0913   # too-many-arguments
+
+[flake8]
+max-line-length = 100
+ignore = E203, E266, E501, W503
+max-complexity = 10
+
+[mypy]
+python_version = 3.8
+warn_return_any = True
+warn_unused_configs = True
+disallow_untyped_defs = False
+
+[tool:pytest]
+testpaths = tests
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+addopts = -v --tb=short
+
+[coverage:run]
+source = .
+omit = tests/*,venv/*,setup.py
+
+[coverage:report]
+precision = 2
+show_missing = True
+skip_covered = False

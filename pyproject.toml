@@ -1,0 +1,114 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neurodev-mcp"
+version = "0.1.0"
+description = "Smart MCP server for code review, test generation, and code execution"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "NeuroDev Team", email = "team@neurodev.io"}
+]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "code-review",
+    "test-generation",
+    "static-analysis",
+    "pytest",
+    "python-development"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
+
+dependencies = [
+    "mcp>=0.9.0",
+    "pylint>=3.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.7.0",
+    "bandit>=1.7.5",
+    "radon>=6.0.1",
+    "autopep8>=2.0.4",
+    "black>=23.12.0",
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-timeout>=2.2.0",
+    "aiofiles>=23.2.1",
+    "pydantic>=2.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.12.0",
+    "mypy>=1.7.0",
+    "pylint>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ravikant1918/neurodev-mcp"
+Documentation = "https://github.com/ravikant1918/neurodev-mcp#readme"
+Repository = "https://github.com/ravikant1918/neurodev-mcp"
+Issues = "https://github.com/ravikant1918/neurodev-mcp/issues"
+
+[project.scripts]
+neurodev-mcp = "neurodev_mcp.server:main"
+
+[tool.setuptools]
+packages = ["neurodev_mcp", "neurodev_mcp.analyzers", "neurodev_mcp.generators", "neurodev_mcp.executors"]
+
+[tool.setuptools.package-data]
+neurodev_mcp = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pylint.main]
+max-line-length = 100
+disable = [
+    "C0111",  # missing-docstring
+    "R0903",  # too-few-public-methods
+    "R0913",  # too-many-arguments
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --tb=short --cov=neurodev_mcp --cov-report=html --cov-report=term"
+
+[tool.coverage.run]
+source = ["neurodev_mcp"]
+omit = ["tests/*", "*/venv/*", "*/.venv/*"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
