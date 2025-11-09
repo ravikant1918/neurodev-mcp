@@ -23,7 +23,7 @@
 <tr>
 <td width="50%">
 
-### �� **Code Review**
+### 🔍 **Code Review**
 - **6 Powerful Analyzers**
   - `pylint` - Code quality & PEP8
   - `flake8` - Style enforcement
