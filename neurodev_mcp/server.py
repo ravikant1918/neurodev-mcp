@@ -8,17 +8,34 @@ This MCP server provides powerful tools for Python development:
 - Test Generation: Intelligent pytest test generation
 - Test Execution: Comprehensive test running with coverage
 - Code Formatting: Auto-formatting with black and autopep8
+
+Supports multiple transports:
+- STDIO (default): For local CLI usage
+- SSE: For web-based integrations
+- HTTP: For REST API integrations
 """
 
+import argparse
 import asyncio
 import json
 import os
+import sys
 import tempfile
 from typing import Any, List
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
+
+# Import SSE transport if available
+try:
+    from mcp.server.sse import SseServerTransport
+    from starlette.applications import Starlette
+    from starlette.routing import Route
+    import uvicorn
+    SSE_AVAILABLE = True
+except ImportError:
+    SSE_AVAILABLE = False
 
 from neurodev_mcp.analyzers import CodeAnalyzer
 from neurodev_mcp.generators import TestGenerator
@@ -240,8 +257,8 @@ async def call_tool(name: str, arguments: Any) -> List[TextContent]:
     return [TextContent(type="text", text=f"Unknown tool: {name}")]
 
 
-async def main():
-    """Run the MCP server."""
+async def main_stdio():
+    """Run the MCP server using STDIO transport (default)."""
     async with stdio_server() as (read_stream, write_stream):
         await app.run(
             read_stream,
@@ -250,5 +267,101 @@ async def main():
         )
 
 
+async def main_sse(host: str = "0.0.0.0", port: int = 8000):
+    """Run the MCP server using SSE transport."""
+    if not SSE_AVAILABLE:
+        print("Error: SSE transport not available. Install with: pip install mcp[sse]", file=sys.stderr)
+        sys.exit(1)
+    
+    sse = SseServerTransport("/messages")
+    
+    async def handle_sse(request):
+        async with sse.connect_sse(
+            request.scope,
+            request.receive,
+            request._send,
+        ) as streams:
+            await app.run(
+                streams[0],
+                streams[1],
+                app.create_initialization_options(),
+            )
+    
+    async def handle_messages(request):
+        await sse.handle_post_message(request.scope, request.receive, request._send)
+    
+    starlette_app = Starlette(
+        debug=True,
+        routes=[
+            Route("/sse", endpoint=handle_sse),
+            Route("/messages", endpoint=handle_messages, methods=["POST"]),
+        ],
+    )
+    
+    config = uvicorn.Config(
+        starlette_app,
+        host=host,
+        port=port,
+        log_level="info"
+    )
+    server = uvicorn.Server(config)
+    
+    print(f"🚀 NeuroDev MCP Server (SSE) running on http://{host}:{port}")
+    print(f"   SSE endpoint: http://{host}:{port}/sse")
+    print(f"   Messages endpoint: http://{host}:{port}/messages")
+    
+    await server.serve()
+
+
+def main():
+    """Main entry point with transport selection."""
+    parser = argparse.ArgumentParser(
+        description="NeuroDev MCP Server - Code analysis, test generation, and more",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Transport Options:
+  stdio (default): Standard input/output for local CLI usage
+  sse:             Server-Sent Events for web-based integrations
+  
+Examples:
+  # Run with STDIO (default)
+  neurodev-mcp
+  
+  # Run with SSE on default port (8000)
+  neurodev-mcp --transport sse
+  
+  # Run with SSE on custom host/port
+  neurodev-mcp --transport sse --host 0.0.0.0 --port 3000
+        """
+    )
+    
+    parser.add_argument(
+        "--transport",
+        choices=["stdio", "sse"],
+        default="stdio",
+        help="Transport protocol to use (default: stdio)"
+    )
+    
+    parser.add_argument(
+        "--host",
+        default="0.0.0.0",
+        help="Host to bind to (SSE only, default: 0.0.0.0)"
+    )
+    
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to bind to (SSE only, default: 8000)"
+    )
+    
+    args = parser.parse_args()
+    
+    if args.transport == "stdio":
+        asyncio.run(main_stdio())
+    elif args.transport == "sse":
+        asyncio.run(main_sse(host=args.host, port=args.port))
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neurodev-mcp"
-version = "0.1.0"
-description = "Smart MCP server for code review, test generation, and code execution"
+version = "0.2.0"
+description = "Smart MCP server for code review, test generation, and code execution with SSE and HTTP streaming support"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"

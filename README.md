@@ -204,6 +204,82 @@ Try these commands with your AI assistant:
 
 ---
 
+## 🌐 Transport Options
+
+NeuroDev MCP supports multiple transport protocols for different use cases:
+
+### **STDIO (Default) - Local CLI**
+
+Perfect for local development with MCP clients like Claude Desktop or Cline:
+
+```bash
+# Default STDIO transport
+neurodev-mcp
+
+# Or explicitly specify STDIO
+neurodev-mcp --transport stdio
+```
+
+**Configuration (Claude Desktop):**
+```json
+{
+  "mcpServers": {
+    "neurodev-mcp": {
+      "command": "neurodev-mcp",
+      "args": ["--transport", "stdio"]
+    }
+  }
+}
+```
+
+### **SSE (Server-Sent Events) - Web Integration**
+
+For web-based integrations and HTTP streaming:
+
+```bash
+# Run with SSE on default port (8000)
+neurodev-mcp --transport sse
+
+# Custom host and port
+neurodev-mcp --transport sse --host 0.0.0.0 --port 3000
+```
+
+**Endpoints:**
+- **SSE Stream:** `http://localhost:8000/sse`
+- **Messages:** `http://localhost:8000/messages` (POST)
+
+**Web Client Example:**
+```javascript
+const sse = new EventSource('http://localhost:8000/sse');
+
+sse.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Received:', data);
+};
+
+// Send message
+fetch('http://localhost:8000/messages', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    method: 'tools/call',
+    params: {
+      name: 'code_review',
+      arguments: { code: 'def test(): pass', analyzers: ['pylint'] }
+    }
+  })
+});
+```
+
+### **Transport Comparison**
+
+| Transport | Use Case | Best For |
+|-----------|----------|----------|
+| **STDIO** | Local CLI clients | Claude Desktop, Cline, local development |
+| **SSE** | Web integrations | Browser apps, webhooks, remote clients |
+
+---
+
 ## 🛠️ Available Tools
 
 ### **1. `code_review`**
